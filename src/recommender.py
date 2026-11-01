@@ -7,14 +7,14 @@ def train_svd_model(rated_df):
     reader = Reader(rating_scale=(1, 5))
     surprise_data = Dataset.load_from_df(rated_df[['user_id', 'book_id', 'rating']], reader)
     
-    trainset, testset = train_test_split(surprise_data, test_size=0.2, random_state=42)
+    trainset, test_set = train_test_split(surprise_data, test_size=0.2, random_state=42)
     
     model = SVD(random_state=42)
     print("Training SVD Matrix Factorization model...")
     model.fit(trainset)
     
-    predictions = model.test(testset)
-    return model, predictions, testset
+    predictions = model.test(test_set)
+    return model, predictions, test_set
 
 def get_top_n_recommendations(user_id, model, original_df, n=5):
     """Generates top N recommendations for a user containing books they have not read"""

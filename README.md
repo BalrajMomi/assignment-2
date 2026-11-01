@@ -14,10 +14,38 @@ book_recommender_project/
 │
 ├── main.py               # Orchestrator running pipeline and recommending books to 3 test users
 ├── requirements.txt      # List of dependencies
+├── run_project.sh        # Bash script to run on macOS/Linux
+├── run_project.bat       # Command script to run on Windows
 └── README.md             # This guide
 ```
 
-## Setup and Installation
+## Quick Run Scripts
+
+We provide convenient automation scripts that handle virtual environment setup, package installation, program execution, and environment cleanup out-of-the-box. These guarantee that no leftover global libraries remain on your system.
+
+### For macOS / Linux:
+1. Open your terminal and navigate to the project directory.
+2. Ensure the script has execute permissions:
+   ```bash
+   chmod +x run_project.sh
+   ```
+3. Run the script:
+   ```bash
+   ./run_project.sh
+   ```
+
+### For Windows:
+1. Open Command Prompt (`cmd`) and navigate to the project directory.
+2. Execute the batch file:
+   ```cmd
+   run_project.bat
+   ```
+
+---
+
+## Manual Setup and Installation
+
+If you prefer to configure and run the project manually:
 
 1. Ensure you have Python installed (3.8+ recommended).
 2. Navigate to the project root directory and install dependencies:
@@ -30,7 +58,7 @@ book_recommender_project/
    conda install -c conda-forge scikit-surprise
    ```
 
-## How to Run
-Execute the central pipeline driver:
-```bash
-python main.py
+3. Execute the central pipeline driver manually:
+   ```bash
+   python main.py
+   ```

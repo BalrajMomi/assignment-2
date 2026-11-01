@@ -3,16 +3,16 @@ from src.data_loader import download_and_load_data, preprocess_data
 from src.recommender import train_svd_model, get_top_n_recommendations
 from src.evaluation import evaluate_predictions, precision_recall_ndcg_at_k
 
+SOURCE_DATA_URL = "https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_interactions_children.json.gz"
+LOCAL_FILE_NAME = "temp/goodreads_interactions_children.json.gz"
+
 def main():
-    url = "https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_interactions_children.json.gz"
-    local_filename = "temp/goodreads_interactions_children.json.gz"
-    
     # 1. Load data
-    df = download_and_load_data(url, local_filename)
+    df = download_and_load_data(SOURCE_DATA_URL, LOCAL_FILE_NAME)
     rated_df = preprocess_data(df)
     
     # 2. Train SVD Recommender
-    model, predictions, testset = train_svd_model(rated_df)
+    model, predictions, test_set = train_svd_model(rated_df)
     
     # 3. Evaluate Error Metrics
     print("\n--- Model Evaluation (Error Metrics) ---")
