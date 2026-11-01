@@ -1,12 +1,6 @@
 from collections import defaultdict
 import numpy as np
-from surprise import accuracy
 
-def evaluate_predictions(predictions):
-    """Computes basic error metrics"""
-    rmse = accuracy.rmse(predictions)
-    mae = accuracy.mae(predictions)
-    return rmse, mae
 
 def precision_recall_ndcg_at_k(predictions, k=10, threshold=3.5):
     """Calculates Precision@K, Recall@K, and NDCG@K for predictions"""
