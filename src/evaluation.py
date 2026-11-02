@@ -9,9 +9,9 @@ def evaluate_predictions(predictions):
     mae = accuracy.mae(predictions)
     return rmse, mae
 
-def precision_recall_ndcg_at_k_flow_2(model, rated_df, trainset, testset, k=5, threshold=3.5, num_unrated_candidates=100):
+def precision_recall_ndcg_at_k(model, rated_df, train_set, test_set, k=5, threshold=3.5, num_unrated_candidates=100):
     """
-    Calculates Precision@K, Recall@K, and NDCG@K using Flow #2:
+    Calculates Precision@K, Recall@K, and NDCG@K:
     Candidates for each test user = (Books liked in Test Set) + (Random pool of Uninteracted Books)
     """
     # Get all unique book IDs in the dataset
@@ -19,14 +19,14 @@ def precision_recall_ndcg_at_k_flow_2(model, rated_df, trainset, testset, k=5, t
     
     # Group test set interactions by user
     test_user_ratings = defaultdict(list)
-    for uid, iid, true_r in testset:
+    for uid, iid, true_r in test_set:
         test_user_ratings[uid].append((iid, true_r))
         
     # Group train set interactions by user to know what they already interacted with
     train_user_books = defaultdict(set)
-    for u, i, _ in trainset.all_ratings():
-        raw_uid = trainset.to_raw_uid(u)
-        raw_iid = trainset.to_raw_iid(i)
+    for u, i, _ in train_set.all_ratings():
+        raw_uid = train_set.to_raw_uid(u)
+        raw_iid = train_set.to_raw_iid(i)
         train_user_books[raw_uid].add(raw_iid)
 
     precisions = {}
@@ -40,11 +40,10 @@ def precision_recall_ndcg_at_k_flow_2(model, rated_df, trainset, testset, k=5, t
         if not liked_test_books:
             continue
 
-        # 2. Get a collection of other books the user has NOT interacted with (not in train, not in test)
+        # 2. Get a collection of other books the user has NOT interacted with
         interacted_books = train_user_books[uid].union({iid for iid, _ in user_test_items})
         uninteracted_books = list(all_books - interacted_books)
-
-        random.seed(42)
+        
         # Sample a subset of uninteracted books to keep computation fast & standardized
         sampled_unrated = random.sample(uninteracted_books, min(len(uninteracted_books), num_unrated_candidates))
         

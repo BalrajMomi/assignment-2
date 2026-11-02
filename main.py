@@ -1,7 +1,7 @@
 import random
 from src.data_loader import download_and_load_data, preprocess_data
 from src.recommender import train_svd_model, get_top_n_recommendations, save_prediction_details
-from src.evaluation import evaluate_predictions, precision_recall_ndcg_at_k_flow_2
+from src.evaluation import evaluate_predictions, precision_recall_ndcg_at_k
 
 def main():
     url = "https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_interactions_children.json.gz"
@@ -12,7 +12,7 @@ def main():
     rated_df = preprocess_data(df)
 
     # 2. Train SVD Recommender
-    model, predictions, testset = train_svd_model(rated_df)
+    model, predictions, test_set = train_svd_model(rated_df)
 
     # 3. Save Actual vs. Predicted Details
     print("\n--- Saving Prediction Details ---")
@@ -22,18 +22,17 @@ def main():
     print("\n--- Model Evaluation (Error Metrics) ---")
     evaluate_predictions(predictions)
 
-    # 5. Evaluate Ranking Metrics (Flow #2)
-    print("\n--- Model Evaluation (Ranking Metrics - Flow #2) ---")
-    # SVD training sets need to be accessed from our trained surprise datasets
+    # 5. Evaluate Ranking Metrics
+    print("\n--- Model Evaluation (Ranking Metrics) ---")
     from surprise import Dataset, Reader
     from surprise.model_selection import train_test_split
     reader = Reader(rating_scale=(1, 5))
     surprise_data = Dataset.load_from_df(rated_df[['user_id', 'book_id', 'rating']], reader)
-    trainset, _ = train_test_split(surprise_data, test_size=0.2, random_state=42)
+    train_set, _ = train_test_split(surprise_data, test_size=0.2, random_state=42)
     
     random.seed(42)
-    prec, rec, ndcg = precision_recall_ndcg_at_k_flow_2(
-        model, rated_df, trainset, testset, k=5, threshold=3.5, num_unrated_candidates=100
+    prec, rec, ndcg = precision_recall_ndcg_at_k(
+        model, rated_df, train_set, test_set, k=5, threshold=3.5, num_unrated_candidates=100
     )
     print(f"Precision@5: {prec:.4f}")
     print(f"Recall@5:    {rec:.4f}")
