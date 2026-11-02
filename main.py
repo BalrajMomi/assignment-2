@@ -18,14 +18,14 @@ def main():
     print("\n--- Saving Prediction Details ---")
     save_prediction_details(predictions)
 
-    # 5. Evaluate Ranking Metrics
+    # 4. Evaluate Ranking Metrics
     print("\n--- Model Evaluation (Ranking Metrics) ---")
     prec, rec, ndcg = precision_recall_ndcg_at_k(predictions, k=5, threshold=3.5)
     print(f"Precision@5: {prec:.4f}")
     print(f"Recall@5:    {rec:.4f}")
     print(f"NDCG@5:      {ndcg:.4f}")
 
-    # 6. Show Top 5 recommendations for 3 random test users (not yet read)
+    # 5. Show Top 5 recommendations for 3 random test users (not yet read)
     test_users = list(set([pred.uid for pred in predictions]))
     random.seed(42)
     selected_users = random.sample(test_users, k=3)
