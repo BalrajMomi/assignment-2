@@ -42,8 +42,7 @@ def main():
     active_test_users = [
         "8842281e1d1347389f2ab93d60773d4d",
         "3d2eff525eb297d5492d463e6aa9b226",
-        "e32d60c9e15aeb2553111a91ae9b8a09",
-        "b92c69232d7d22448171f9d53ede46e2",
+        "dc21ae17b4ac20dcff6d3e0286889796"
     ]
 
     for i, user in enumerate(active_test_users, 1):
