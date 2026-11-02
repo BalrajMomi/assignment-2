@@ -228,3 +228,6 @@ __marimo__/
 #Ignore IntelliJ files
 .idea/
 temp/
+
+#Ignore project files
+goodreads_interactions_children.json.gz

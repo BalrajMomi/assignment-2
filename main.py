@@ -29,7 +29,7 @@ def main():
     reader = Reader(rating_scale=(1, 5))
     surprise_data = Dataset.load_from_df(rated_df[['user_id', 'book_id', 'rating']], reader)
     train_set, _ = train_test_split(surprise_data, test_size=0.2, random_state=42)
-    
+
     random.seed(42)
     prec, rec, ndcg = precision_recall_ndcg_at_k(
         model, rated_df, train_set, test_set, k=5, threshold=3.5, num_unrated_candidates=100
@@ -38,12 +38,14 @@ def main():
     print(f"Recall@5:    {rec:.4f}")
     print(f"NDCG@5:      {ndcg:.4f}")
 
-    # 6. Show Top 5 recommendations for 3 random test users
-    test_users = list(set([pred.uid for pred in predictions]))
-    random.seed(42)
-    selected_users = random.sample(test_users, k=3)
+    # 6. Show Top 5 recommendations for our selected active users
+    active_test_users = [
+        "8842281e1d1347389f2ab93d60773d4d",
+        "3d2eff525eb297d5492d463e6aa9b226",
+        "e32d60c9e15aeb2553111a91ae9b8a09"
+    ]
 
-    for i, user in enumerate(selected_users, 1):
+    for i, user in enumerate(active_test_users, 1):
         print(f"\n--- User {i}: {user} ---")
         recs = get_top_n_recommendations(user, model, rated_df, n=5)
         print("Top 5 Unread Book Recommendations:")
